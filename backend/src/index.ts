@@ -1,9 +1,22 @@
 import express, { Request, Response } from "express";
+import { dbConnection } from "./controller/dbConnection";
+import { twitchApiConnection } from "./controller/twitchAuth";
+import userRouter from "./router/user";
 
 const app = express();
 const port = process.env.PORT || 5001;
 var statusCode: number = 200;
 var statusMessage: string = "All system is green";
+
+dbConnection()
+    .then(res => console.log('Connecting to DB was sucessfull'))
+    .catch(error => console.error(error));
+
+try {
+    twitchApiConnection();
+} catch (error) {
+    console.error(error);
+}
 
 app.use(express.json());
 app.use(function(req: Request, res: Response, next) {
@@ -18,6 +31,8 @@ app.get('/status', (req: Request, res: Response) => {
         "status":statusMessage
     });
 });
+
+app.use('/user', userRouter);
   
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);

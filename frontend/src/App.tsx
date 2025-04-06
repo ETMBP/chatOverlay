@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="App">
       <span><h1>Under Dev</h1></span>
+      <span>{process.env.REACT_APP_BACKEND_URL}</span>
     </div>
   );
 }
