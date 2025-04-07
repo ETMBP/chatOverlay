@@ -1,0 +1,45 @@
+{
+	"folders": [
+		{
+			"name": "projectRoot",
+			"path": ".."
+		},
+		{
+			"name": "backend",
+			"path": "../backend"
+		},
+		{
+			"name": "frontend",
+			"path": "../frontend"
+		}
+	],
+	"settings": {},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"cwd": "${workspaceFolder:backend}",
+				"command": "npm start",
+				"name": "Start backend",
+				"request": "launch",
+				"type": "node-terminal",
+				"envFile": "${workspaceFolder:backend}/.env"
+			},
+			{
+				"command": "${workspaceFolder:frontend} npm start",
+				"name": "Start frontend",
+				"request": "launch",
+				"type": "node-terminal"
+			}
+		],
+		"compounds": [
+			{
+				"name": "Launch Both",
+				"configurations": [
+					"Start backend",
+					"Start frontend"
+				]
+			}
+		]
+	}
+}

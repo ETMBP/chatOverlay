@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { dbConnection } from "./controller/dbConnection";
 import { twitchApiConnection } from "./controller/twitchAuth";
 import userRouter from "./router/user";
+import badgeRouter from "./router/badge";
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -33,6 +34,7 @@ app.get('/status', (req: Request, res: Response) => {
 });
 
 app.use('/user', userRouter);
+app.use('/badge', badgeRouter);
   
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);

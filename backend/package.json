@@ -21,6 +21,7 @@
   "dependencies": {
     "@twurple/api": "^7.2.1",
     "@twurple/auth": "^7.2.1",
+    "date-fns": "^4.1.0",
     "express": "^5.1.0",
     "mongodb": "^6.15.0"
   }
