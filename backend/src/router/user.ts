@@ -1,9 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { User } from "../controller/user";
 
 const userRouter = Router();
 
-userRouter.get('/id', async (req: Request, res: Response) => {
+userRouter.get('/id', async (req: Request, res: Response, next: NextFunction) => {
     const username = req.query.username;
     const lifetime = req.query.lifetime;
     if (!!username && typeof username === 'string' && (typeof lifetime === 'string' || typeof lifetime === 'undefined')) {
@@ -12,8 +12,7 @@ userRouter.get('/id', async (req: Request, res: Response) => {
             myUser = new User(username, Number(lifetime));
             await myUser.setTwitchId();
         } catch (error) {
-            console.error(error);
-            res.status(500).json({message:`${error}`}).end();
+            return next(error);
         }
 
         try {
@@ -25,8 +24,7 @@ userRouter.get('/id', async (req: Request, res: Response) => {
             }
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({message:`${error}`}).end();
+            return next(error);
         }
     }
     else {
@@ -34,7 +32,7 @@ userRouter.get('/id', async (req: Request, res: Response) => {
     }
 });
 
-userRouter.get('/pfp', async (req: Request, res: Response) => {
+userRouter.get('/pfp', async (req: Request, res: Response, next: NextFunction) => {
     const username = req.query.username;
     const lifetime = req.query.lifetime;
     if (!!username && typeof username === 'string' && (typeof lifetime === 'string' || typeof lifetime === 'undefined')) {
@@ -44,8 +42,7 @@ userRouter.get('/pfp', async (req: Request, res: Response) => {
             await myUser.setPfpUrl();
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({message:`${error}`}).end();
+            return next(error);
         }
 
         try {
@@ -57,8 +54,7 @@ userRouter.get('/pfp', async (req: Request, res: Response) => {
             }
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({message:`${error}`}).end();
+            return next(error);
         }
     }
     else {

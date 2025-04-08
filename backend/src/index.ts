@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { dbConnection } from "./controller/dbConnection";
 import { twitchApiConnection } from "./controller/twitchAuth";
 import userRouter from "./router/user";
@@ -35,6 +35,10 @@ app.get('/status', (req: Request, res: Response) => {
 
 app.use('/user', userRouter);
 app.use('/badge', badgeRouter);
+app.use((error: Error, req: Request, res: Response, next: NextFunction) =>{
+    console.error(`${error}`);
+    res.status(500).json({message: `${error}`});
+});
   
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
