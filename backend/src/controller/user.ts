@@ -11,7 +11,7 @@ export class User implements IUser {
     updatedWhen: Date;
     lifetime: number;
 
-    constructor(username: string, lifetime: number | undefined) {
+    constructor(username: string, lifetime?: number) {
         this.username = username;
         this.updatedWhen = new Date();
         this.lifetime = this.setLifetime(lifetime);
@@ -25,7 +25,7 @@ export class User implements IUser {
             return process.env.USER_LIFETIME
         }
         else {
-            return 60
+            return 30
         }
     }
 
