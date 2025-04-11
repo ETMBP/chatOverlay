@@ -4,6 +4,7 @@ import { twitchApiConnection } from "./controller/twitchAuth";
 import userRouter from "./router/user";
 import badgeRouter from "./router/badge";
 import emoteRouter from "./router/emote";
+import systemRouter from "./router/router";
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -37,6 +38,7 @@ app.get('/status', (req: Request, res: Response) => {
 app.use('/user', userRouter);
 app.use('/badge', badgeRouter);
 app.use('/emote', emoteRouter);
+app.use('/system', systemRouter);
 app.use((error: Error, req: Request, res: Response, next: NextFunction) =>{
     console.error(`${error}`);
     res.status(500).json({message: `${error}`});
