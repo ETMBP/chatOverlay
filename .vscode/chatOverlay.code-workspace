@@ -26,10 +26,19 @@
 				"envFile": "${workspaceFolder:backend}/.env"
 			},
 			{
-				"command": "${workspaceFolder:frontend} npm start",
+				"cwd": "${workspaceFolder:frontend}",
+				"command": "npm start",
 				"name": "Start frontend",
 				"request": "launch",
-				"type": "node-terminal"
+				"type": "node-terminal",
+				"envFile": "${workspaceFolder}/.env.local"
+			},
+			{
+				"type": "chrome",
+				"request": "launch",
+				"name": "Launch Chrome against localhost",
+				"url": "http://localhost:3000/?streamer=zelixplore",
+				"webRoot": "${workspaceFolder:frontend}/public"
 			}
 		],
 		"compounds": [
@@ -38,6 +47,13 @@
 				"configurations": [
 					"Start backend",
 					"Start frontend"
+				]
+			},
+			{
+				"name": "Launch chrome with frontend",
+				"configurations": [
+					"Start frontend",
+					"Launch Chrome against localhost"
 				]
 			}
 		]

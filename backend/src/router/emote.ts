@@ -1,18 +1,50 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { Emote, fetchSTvEmotes, fetchTwitchChannelEmotes, fetchTwitchGlobalEmotes, getAllNames } from "../controller/emote";
+import { addMinutes } from "date-fns/addMinutes";
 
 const emoteRouter = Router();
 
+let lastFetchAllEvent: {
+    streamerName?: string,
+    lastDate?: Date
+} = {};
+
 emoteRouter.get('/fetchall', async (req: Request, res: Response, next: NextFunction) => {
     const username = req.query.username;
+    const currentDate = new Date();
+    let responseObj = {}
+
+    if (!!lastFetchAllEvent.streamerName && !!lastFetchAllEvent.lastDate) {
+        console.debug('FetchAll event exists');
+    }
+    else {
+        lastFetchAllEvent = {
+            lastDate: addMinutes(currentDate, -40)
+        }
+    }
 
     if (!!username && typeof username === 'string') {
         try {
-            await fetchTwitchGlobalEmotes();
-            await fetchTwitchChannelEmotes(username);
-            await fetchSTvEmotes(username);
+            if (username !== lastFetchAllEvent.streamerName || currentDate > addMinutes(lastFetchAllEvent.lastDate!, 30)) {
+                await fetchTwitchGlobalEmotes();
+                await fetchTwitchChannelEmotes(username);
+                await fetchSTvEmotes(username);
+                lastFetchAllEvent = {
+                    streamerName: username,
+                    lastDate: new Date()
+                }
+                responseObj = {
+                    message: 'success'
+                }
+            }
+            else {
+                console.debug('Last fetch all was within 30 minutes, nothing to do');
+                responseObj = {
+                    message: 'Last update was within 30 minutes'
+                }
+            }
 
-            res.status(200).json({message: 'Succes'}).end();
+            res.status(200).json(responseObj).end();
         } catch (error) {
             return next(error);
         }

@@ -1,8 +1,14 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { Badge, fetchChannelBadges, fetchGlobalBadges } from "../controller/badge";
 import { IBadge } from "../models/badge";
+import { addMinutes } from "date-fns";
 
 const badgeRouter = Router();
+
+let lastFetchAllEvent: {
+    streamerName?: string,
+    lastDate?: Date
+} = {};
 
 badgeRouter.get('/fetchglobal', async (req: Request, res: Response, next: NextFunction) =>{
     try {
@@ -25,6 +31,50 @@ badgeRouter.get('/fetchchannel', async (req: Request, res: Response, next: NextF
         }
 
         res.status(200).json({messgae:'success'}).end();
+    }
+    else {
+        res.status(401).json({message:'Bad Request'}).end();
+    }
+});
+
+badgeRouter.get('/fetchall', async (req: Request, res: Response, next: NextFunction) => {
+    const streamerName = req.query.username;
+    const currentDate = new Date();
+    let responseObj = {}
+
+    if (!!lastFetchAllEvent.streamerName && !!lastFetchAllEvent.lastDate) {
+        console.debug('FetchAll event exists');
+    }
+    else {
+        lastFetchAllEvent = {
+            lastDate: addMinutes(currentDate, -40)
+        }
+    }
+
+    if (!!streamerName && typeof streamerName === 'string') {
+        try {
+            if (streamerName !== lastFetchAllEvent.streamerName || currentDate > addMinutes(lastFetchAllEvent.lastDate!, 30)) {
+                await fetchGlobalBadges();
+                await fetchChannelBadges(streamerName);
+                lastFetchAllEvent = {
+                    streamerName: streamerName,
+                    lastDate: new Date()
+                }
+                responseObj = {
+                    message: 'success'
+                }
+            }
+            else {
+                console.debug('Last fetch all was within 30 minutes, nothing to do');
+                responseObj = {
+                    message: 'Last update was within 30 minutes'
+                }
+            }
+        } catch (error) {
+            return next(error);
+        }
+
+        res.status(200).json(responseObj).end();
     }
     else {
         res.status(401).json({message:'Bad Request'}).end();
