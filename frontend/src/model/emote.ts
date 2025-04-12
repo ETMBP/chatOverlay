@@ -1,5 +1,5 @@
 
-export interface  IEmote {
+export interface  IBackendEmote {
     name: string,
     sourceId?: string,
     emoteUrl?: string

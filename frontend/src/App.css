@@ -1,0 +1,59 @@
+@font-face {
+    font-family: 'Neo Sans Zeli';
+    src: local('Neo Sans'), url(./fonts/Neo_Sans.TTF) format('truetype');
+}
+
+li {
+    list-style-type: none;
+}
+
+#chat-container {
+    width: 400px;
+    height: 800px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    scrollbar-width: none;
+    font-family: 'Neo Sans Zeli';
+    font-size: 16pt;
+    color: antiquewhite;
+    margin: 0px;
+    padding: 0px;
+}
+
+.chat-message-container {
+    background-color: blueviolet;
+}
+
+.user-container {
+    background-color: aqua;
+    display: block;
+}
+
+.pfp-container {
+    width: 50px;
+    height: 50px;
+    float: left;
+    background-color: blue;
+}
+
+.pfp-img {
+    border-radius: 50%;
+    height: 50px;
+}
+
+.badges-container {
+    height: 15px;
+    float: left;
+    background-color: brown;
+}
+
+.badge {
+    height: 15px;
+    float: left;
+}
+
+.message {
+    word-wrap: break-word;
+    font-size: 14pt;
+}

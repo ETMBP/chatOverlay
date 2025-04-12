@@ -1,27 +1,30 @@
-import { IBadge } from "./badge"
-import { IEmote } from "./emote"
-
-export interface IPfpContainerProps {
-    pfpUrl: string
-}
-
-export interface IUserNameContainerProps {
-    username: string,
-    usernameColor: string
-}
-
-export interface IBadgeContainerProps {
-    badges?: IBadge[]
-}
-
-export interface IMessageContainerProps {
-    rawMessage: string
-    emotes?: IEmote[]
-}
-
+import { ChatMessage } from "../control/chat"
+import { ChatUser } from "../control/user"
+import { IBackendBadge, IBadge } from "./badge"
+import { IBackendEmote } from "./emote"
 
 export interface IUserContainerProps {
-    pfpContainerProps: IPfpContainerProps,
-    usernameContainerProps: IUserNameContainerProps,
-    badgeContainerProps: IBadgeContainerProps
+    chatMessage: ChatMessage
+}
+
+export interface IChatMessageContainerProps {
+    userContainerProps: ChatMessage,
+    //messageContainerProps: IMessageContainerProps
+}
+
+export interface IIncomingChatMessage {
+    user: string,
+    message: string,
+    flags: any,
+    extra: any
+
+}
+
+export interface IChatMessage {
+    user?: ChatUser,
+    incomingMessage: IIncomingChatMessage,
+}
+
+export interface IChatMessageContainerState {
+    animationClass: string
 }

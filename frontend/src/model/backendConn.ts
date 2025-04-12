@@ -5,7 +5,7 @@ export interface IBackendUrls {
     user: string
 }
 
-export class BackendConn implements IBackendUrls {
+export class BackendConnection implements IBackendUrls {
     base: string;
     user: string;
     badge: string;
@@ -17,4 +17,8 @@ export class BackendConn implements IBackendUrls {
         this.badge = this.base + '/badge';
         this.emote = this.base + '/emote'
     }
+}
+
+export interface IBackendError {
+    message: string;
 }

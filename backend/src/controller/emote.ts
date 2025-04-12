@@ -202,7 +202,7 @@ export async function fetchTwitchChannelEmotes(username: string): Promise<void> 
         }
     }
     else {
-        throw Error('Channel emotes came back empty');
+        console.warn('Channel emotes came back empty');
     }
 }
 
