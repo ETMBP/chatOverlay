@@ -10,9 +10,11 @@ export class ChatMessageContainer extends React.Component<IChatMessageContainerP
 
     public render() {
         return (
-            <li className="chat-message-container">
-                <UserContainer chatMessage={this.props.userContainerProps}></UserContainer>
-            </li>
+            <>
+            <div className="chat-message-container">
+                <UserContainer chatMessage={this.props.containerProps}></UserContainer>
+            </div><br />
+            </>
         )
     }
 }

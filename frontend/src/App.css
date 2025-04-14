@@ -27,13 +27,15 @@ li {
 
 .user-container {
     background-color: aqua;
-    display: block;
+}
+
+.username {
+    font-size: 20pt;
 }
 
 .pfp-container {
     width: 50px;
     height: 50px;
-    float: left;
     background-color: blue;
 }
 
@@ -42,15 +44,17 @@ li {
     height: 50px;
 }
 
+.username-container {
+    background-color: cadetblue;
+}
+
 .badges-container {
-    height: 15px;
-    float: left;
+    height: 18px;
     background-color: brown;
 }
 
 .badge {
-    height: 15px;
-    float: left;
+    height: 18px;
 }
 
 .message {
