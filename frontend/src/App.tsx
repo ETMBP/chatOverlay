@@ -4,19 +4,18 @@ import ComfyJS from 'comfy.js';
 import { useSearchParams } from 'react-router';
 import { connectComfy, initBackend } from './control/init';
 import { ChatMessage } from './control/chat';
-import { IChatMessage, IChatMessageDTO, IIncomingChatMessage } from './model/chat';
+import { IChatMessage, IChatMessageBadgeDTO, IChatMessageContainerProps, IChatMessageDTO, IIncomingChatMessage } from './model/chat';
 import { ChatMessageContainer } from './view/chat';
 
-let processedMessageQueue: Array<ChatMessage> = new Array<ChatMessage>();
+let processedMessageQueue: Array<IChatMessageContainerProps> = new Array<IChatMessageContainerProps>();
 
 function App() {
-  const [messageQueue, setMessageQueue] = useState([] as ChatMessage[]);
   const [lastMessageProcessed, setLastMessageprocessed] = useState(new Date());
   const [searchParams, setSearchParams] = useSearchParams();
-  const streamerName = searchParams.get('streamer') || 'zentreya';
-  let incomingMessageQueue: Array<ChatMessage> = new Array<ChatMessage>();
+  const streamerName = searchParams.get('streamer') || 'zelixplore';
+  const messageDisplayTimeout = searchParams.get('msg-timeout');
 
-  const addToMessageQueue = (resolvedChatMessage: ChatMessage, remove?: boolean) => {
+  const setProcessedMessageQueue = (resolvedChatMessage: IChatMessageContainerProps, remove?: boolean) => {
     if (!remove) {
       processedMessageQueue.splice(0,0,resolvedChatMessage);
       setLastMessageprocessed(new Date());
@@ -24,27 +23,30 @@ function App() {
     else {
       for (let i = 0; i < processedMessageQueue.length; i++) {
         const msg = processedMessageQueue[i];
-        if (msg.incomingMessage.extra.id === resolvedChatMessage.incomingMessage.extra.id) {
+        if (msg.containerProps.id === resolvedChatMessage.containerProps.id) {
           processedMessageQueue.splice(i,1);
         }
       }
+      
+      setLastMessageprocessed(new Date());
     }
   }
 
   const addIncomingMessage = async (incomingChatMessage: IIncomingChatMessage) => {
-    const myIncomingChatMessage = new ChatMessage(incomingChatMessage);
-    myIncomingChatMessage.setMessageQueue = addToMessageQueue
+    let msgLifetime: number;
+    if (!!messageDisplayTimeout) {
+      msgLifetime = parseInt(messageDisplayTimeout)
+    }
+    else if (!!process.env.REACT_MESSAGE_LIFETIME) {
+      msgLifetime = parseInt(process.env.REACT_MESSAGE_LIFETIME) 
+    }
+    else {
+      msgLifetime = 15000
+    }
+    
+    const myIncomingChatMessage = new ChatMessage(incomingChatMessage, msgLifetime);
+    myIncomingChatMessage.setMessageQueue = setProcessedMessageQueue
     myIncomingChatMessage.init();
-    //incomingMessageQueue.push(myIncomingChatMessage);
-  }
-
-  const removeSelf = (messageID: string) => {
-    let newMessageQueue = messageQueue;
-    const filteredQueue = newMessageQueue.filter(item => {
-      return (messageID !== item.incomingMessage.extra.id) as boolean
-    });
-
-    setMessageQueue(filteredQueue);
   }
 
   ComfyJS.onChat = async (user: string, message: string, flags: object, self: any, extra: any) => {
@@ -64,15 +66,15 @@ function App() {
     initBackend(streamerName);
     connectComfy(streamerName);
     if (!processedMessageQueue) {
-      processedMessageQueue = new Array<ChatMessage>()
+      processedMessageQueue = new Array<IChatMessageContainerProps>()
     }
   }, [streamerName]);
 
   return (
     <div className="App">
       <div id='chat-container'>
-        {processedMessageQueue!.map(cm => <React.Fragment key={cm.incomingMessage.extra.id}>
-          <ChatMessageContainer containerProps={cm}></ChatMessageContainer>
+        {processedMessageQueue!.map(cm => <React.Fragment key={cm.containerProps.id}>
+          <ChatMessageContainer containerProps={cm.containerProps}></ChatMessageContainer>
         </React.Fragment>)}
       </div>
     </div>

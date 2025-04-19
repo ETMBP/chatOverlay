@@ -15,48 +15,55 @@ li {
     flex-direction: column-reverse;
     scrollbar-width: none;
     font-family: 'Neo Sans Zeli';
-    font-size: 16pt;
     color: antiquewhite;
-    margin: 0px;
-    padding: 0px;
+    margin-left: 10px;
 }
 
 .chat-message-container {
-    background-color: blueviolet;
+    margin-bottom: 10px;
+    background-color: rgba(255, 0, 0, 0.1);
+    padding: 5px;
 }
 
 .user-container {
-    background-color: aqua;
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    column-gap: 10px;
 }
 
 .username {
-    font-size: 20pt;
+    font-size: 18pt;
 }
 
 .pfp-container {
     width: 50px;
     height: 50px;
-    background-color: blue;
+    grid-row-start: 1;
+    grid-row-end: 3;
 }
 
 .pfp-img {
     border-radius: 50%;
-    height: 50px;
+    width: 50px;
 }
 
-.username-container {
-    background-color: cadetblue;
-}
+/*.username-container {
+}*/
 
 .badges-container {
     height: 18px;
-    background-color: brown;
+    display: flex;
+    flex-direction: row;
 }
 
 .badge {
+    width: 18px;
     height: 18px;
 }
 
+.msg-container {
+    margin-top: 5px;
+}
 .message {
     word-wrap: break-word;
     font-size: 14pt;

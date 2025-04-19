@@ -5,3 +5,8 @@ export interface  IBackendEmote {
     emoteUrl?: string
     _id?: string
 }
+
+export interface IEmote {
+    emoteId: string,
+    positions: Array<string>
+}

@@ -3,6 +3,7 @@ import noPfp from '../content/no_pfp.png'
 import { BackendConnection, IBackendError } from '../model/backendConn';
 import { IBackendBadge, IBadge } from '../model/badge';
 import { IBackendUser, IUser } from '../model/user';
+import { BackendError } from '../model/error';
 
 export class ChatUser implements IUser {
     username: string;
@@ -72,13 +73,20 @@ export class ChatUser implements IUser {
                         }
                     });
                 }
-            } catch (error) {
-                
+                else {
+                    const backendError = await response.json();
+                    throw new BackendError(backendError.message);
+                }
+            } 
+            catch (error) {
+                if (error instanceof BackendError) {
+                    console.error('Backend error: ' + error)
+                }
+                else {
+                    console.error(error)
+                }
             }
         }
-    }
-
-    public async getBadges(): Promise<IBadge[] | void> {
     }
 }
 

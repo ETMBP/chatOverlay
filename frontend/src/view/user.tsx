@@ -7,7 +7,7 @@ export class UserContainer extends React.Component<IUserContainerProps> {
     }
 
     public isBadges(): boolean {
-        if (!!this.props.chatMessage.user?.badges && this.props.chatMessage.user.badges.length > 0) {
+        if (!!this.props.user.badges && this.props.user.badges.length > 0) {
             return true
         }
         else {
@@ -19,14 +19,14 @@ export class UserContainer extends React.Component<IUserContainerProps> {
         return (
         <div className="user-container">
             <div className="pfp-container">
-                <img src={this.props.chatMessage.user?.pfpUrl} className="pfp-img"></img>
+                <img src={this.props.user.pfpUrl} className="pfp-img" alt="pfp"></img>
             </div>
             <div className="username-container">
-                <span className="username" style={{color: this.props.chatMessage.user?.displayNameColor}}>{this.props.chatMessage.user?.displayName}</span>
+                <span className="username" style={{color: this.props.user.displayNameColor}}>{this.props.user.displayName}</span>
             </div>
             <div className="badges-container">
                 {this.isBadges() ?
-                    this.props.chatMessage.user?.badges?.map(bu => 
+                    this.props.user.badges?.map(bu => 
                         <div className="badge" key={crypto.randomUUID()}>
                             <img src={bu.badgeUrl} className="badge-img"></img>
                         </div>

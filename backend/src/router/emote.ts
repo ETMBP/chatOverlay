@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { Emote, fetchSTvEmotes, fetchTwitchChannelEmotes, fetchTwitchGlobalEmotes, getAllNames } from "../controller/emote";
 import { addMinutes } from "date-fns/addMinutes";
+import { IEmote } from "../models/emote";
 
 const emoteRouter = Router();
 
@@ -132,6 +133,43 @@ emoteRouter.get('/getone', async (req: Request, res: Response, next: NextFunctio
         res.status(401).json({message: 'Bad Request'});
     }
 });
+
+emoteRouter.post('/getmany', async (req: Request, res: Response, next: NextFunction) => {
+    const emotes = req.body as IEmote[];
+
+    if (!!emotes) {
+        let resolvedEmotes: Emote[] = [];
+
+        for (let i = 0; i < emotes.length; i++) {
+            const emote = emotes[i];
+            let myEmote: Emote;
+            try {
+                myEmote = new Emote(emote.name, emote.sourceId);
+                await myEmote.setEmoteUrl();
+            } catch (error) {
+                return next(error);
+            }
+
+            if (!!myEmote && !!myEmote.emoteUrl) {
+                resolvedEmotes.push(myEmote);
+            }
+            else {
+                console.error(emote.name + ' does not have URL');
+            }
+        }
+
+        if (!!resolvedEmotes && resolvedEmotes.length > 0) {
+            res.status(200).json(resolvedEmotes).end();
+        }
+        else {
+            return next(Error('Empty Data'));
+        }
+    }
+    else {
+        res.status(401).json({message: 'Bad Request'});
+    }
+});
+
 
 emoteRouter.get('/getallnames', async (req: Request, res: Response, next: NextFunction) => {
     let names: string[] | undefined | void

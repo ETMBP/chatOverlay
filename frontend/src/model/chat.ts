@@ -1,16 +1,16 @@
 import { Interface } from "readline"
-import { ChatMessage } from "../control/chat"
+import { ChatMessage, Message } from "../control/chat"
 import { ChatUser } from "../control/user"
 import { IBackendBadge, IBadge } from "./badge"
-import { IBackendEmote } from "./emote"
+import { IBackendEmote, IEmote } from "./emote"
+import { IUser } from "./user"
 
 export interface IUserContainerProps {
-    chatMessage: ChatMessage
+    user: ChatUser
 }
 
 export interface IChatMessageContainerProps {
-    containerProps: ChatMessage,
-    //messageContainerProps: IMessageContainerProps
+    containerProps: IChatMessageDTO
 }
 
 export interface IIncomingChatMessage {
@@ -20,32 +20,45 @@ export interface IIncomingChatMessage {
     extra: any
 }
 
-export interface IChatMessageEmoteDTO {
-    emoteId: string,
-    positions: Array<string>
-}
-
 export interface IChatMessageBadgeDTO {
     name: string,
     version: string
 }
 
+export interface IChatMessageMessagePart {
+    part: string,
+    isUrl: boolean
+}
+
 export interface IChatMessageDTO {
     id: string,
-    username: string,
-    rawMessage: string,
-    displayName?: string,
-    userColor?: string,
-    twitchEmotes?: Array<IChatMessageEmoteDTO>,
-    twitchBadges?: Array<IChatMessageBadgeDTO>
+    messageLifetime: number,
+    user: ChatUser,
+    messageParts: Array<IChatMessageMessagePart>
+    setMessageQueue: (outgoingMessage: IChatMessageContainerProps, remove: boolean) => void
 }
 
 export interface IChatMessage {
-    user?: ChatUser,
     incomingMessage: IIncomingChatMessage,
-    setMessageQueue?: (outgoingMessage: ChatMessage, remove: boolean) => void
+    messageLifetime: number,
+    user?: ChatUser,
+    message?: Message,
+    extractedEmotes?: Array<IEmote>,
+    setMessageQueue: (outgoingMessage: IChatMessageContainerProps, remove: boolean) => void
 }
 
 export interface IChatMessageContainerState {
     animationClass: string
+}
+
+export interface IMessage {
+    rawMessage: string,
+    twitchEmotes?: Array<IEmote>,
+    resolvedEmotes?: Array<IBackendEmote>,
+    emoteRegExp?: RegExp,
+    messageParts?: Array<IChatMessageMessagePart>
+}
+
+export interface IMessageContainerProps {
+    messageParts: Array<IChatMessageMessagePart>
 }
