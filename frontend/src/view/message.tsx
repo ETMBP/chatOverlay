@@ -9,8 +9,8 @@ export class MessageContainer extends React.Component<IMessageContainerProps> {
     public render(): React.ReactNode {
         return (
             <div className="msg-container">
-                {this.props.messageParts.map(msgPart => 
-                    msgPart.isUrl ? <img src={msgPart.part} alt="emote" className="msg-emote" key={crypto.randomUUID()} /> : <span className="msg-text" key={crypto.randomUUID()}>{msgPart.part}</span>
+                {this.props.messageParts.map((msgPart, i) =>  
+                    msgPart.isUrl ? <img src={msgPart.part} alt="emote" className="msg-emote" key={i} /> : <span className="msg-text" key={i}>{msgPart.part}</span>
                 )}
             </div>
         );

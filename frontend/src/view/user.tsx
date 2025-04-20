@@ -26,8 +26,8 @@ export class UserContainer extends React.Component<IUserContainerProps> {
             </div>
             <div className="badges-container">
                 {this.isBadges() ?
-                    this.props.user.badges?.map(bu => 
-                        <div className="badge" key={crypto.randomUUID()}>
+                    this.props.user.badges?.map((bu, i) => 
+                        <div className="badge" key={i}>
                             <img src={bu.badgeUrl} className="badge-img"></img>
                         </div>
                     ) : <></>
