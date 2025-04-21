@@ -3,10 +3,6 @@
     src: local('Neo Sans'), url(./fonts/Neo_Sans.TTF) format('truetype');
 }
 
-li {
-    list-style-type: none;
-}
-
 #chat-container {
     width: 400px;
     height: 800px;
@@ -17,12 +13,17 @@ li {
     font-family: 'Neo Sans Zeli';
     color: antiquewhite;
     margin-left: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .chat-message-container {
-    margin-bottom: 10px;
     background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.7);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    margin-bottom: 10px;
     padding: 5px;
+    border-radius: 5px;
 }
 
 .user-container {
@@ -67,4 +68,8 @@ li {
 .message {
     word-wrap: break-word;
     font-size: 14pt;
+}
+
+.msg-text{
+    color: rgb(0,0,0);
 }

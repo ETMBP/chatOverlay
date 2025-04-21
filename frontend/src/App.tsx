@@ -6,6 +6,7 @@ import { connectComfy, initBackend } from './control/init';
 import { ChatMessage } from './control/chat';
 import { IChatMessage, IChatMessageBadgeDTO, IChatMessageContainerProps, IChatMessageDTO, IIncomingChatMessage } from './model/chat';
 import { ChatMessageContainer } from './view/chat';
+import { AnimatePresence, motion } from 'framer-motion';
 
 let processedMessageQueue: Array<IChatMessageContainerProps> = new Array<IChatMessageContainerProps>();
 
@@ -73,9 +74,16 @@ function App() {
   return (
     <div className="App">
       <div id='chat-container'>
-        {processedMessageQueue!.map(cm => <React.Fragment key={cm.containerProps.id}>
-          <ChatMessageContainer containerProps={cm.containerProps}></ChatMessageContainer>
-        </React.Fragment>)}
+        <AnimatePresence mode='popLayout'>
+          {processedMessageQueue!.map(cm => <motion.div key={cm.containerProps.id}
+            layout
+            initial={{ opacity: 0, x: -400, scale: 0.5 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 200, scale: 1.2 }}
+            transition={{ duration: 0.6, type: "spring" }}>
+            <ChatMessageContainer containerProps={cm.containerProps}></ChatMessageContainer>
+          </motion.div>)}
+        </AnimatePresence>
       </div>
     </div>
   );
