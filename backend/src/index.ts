@@ -7,7 +7,7 @@ import emoteRouter from "./router/emote";
 import systemRouter from "./router/router";
 
 const app = express();
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5000;
 var statusCode: number = 200;
 var statusMessage: string = "All system is green";
 
