@@ -8,7 +8,7 @@ on:
 jobs:
   push_backend_to_registry:
     name: Push backend image to Docker Hub
-    runs-on: arc-k8s-runner-set
+    runs-on: docker-build-etmbp
     permissions:
       packages: write
       contents: read
@@ -41,7 +41,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
   push_frontend_to_registry:
     name: Push frontend image to Docker Hub
-    runs-on: arc-k8s-runner-set
+    runs-on: docker-build-etmbp
     permissions:
       packages: write
       contents: read
