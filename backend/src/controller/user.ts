@@ -1,7 +1,7 @@
 import { HelixUser } from "@twurple/api";
-import { IUser } from "../models/user"
-import collections from "./dbConnection";
-import { tApi } from "./twitchAuth";
+import { IUser } from "../models/user.js"
+import collections from "./dbConnection.js";
+import { tApi } from "./twitchAuth.js";
 import { addMinutes } from "date-fns"
 
 export class User implements IUser {

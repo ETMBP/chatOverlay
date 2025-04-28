@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { User } from "../controller/user";
+import { User } from "../controller/user.js";
 
 const userRouter = Router();
 

@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx tsx --env-file=.env --watch  src/index.ts",
     "container-start": "npx tsx index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "build:prod": "tsc --project tsconfig.prod.json",
+    "start:prod": "node dist/index.js"
   },
   "author": "Zeli",
   "license": "ISC",

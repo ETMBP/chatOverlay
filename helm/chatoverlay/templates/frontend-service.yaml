@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chatoverlay.frontendName" . }}
+  labels:
+    {{- include "chatoverlay.frontendLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.frontendService.type }}
+  ports:
+    - port: {{ .Values.frontendService.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "chatoverlay.frontendSelectorLabels" . | nindent 4 }}

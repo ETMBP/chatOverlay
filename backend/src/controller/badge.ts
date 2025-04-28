@@ -1,9 +1,9 @@
-import { IBadge } from "../models/badge";
+import { IBadge } from "../models/badge.js";
 import { ObjectId } from "mongodb";
-import { tApi } from "./twitchAuth";
+import { tApi } from "./twitchAuth.js";
 import { HelixChatBadgeSet, HelixChatBadgeVersion } from "@twurple/api";
-import collections, { dbConnection } from "./dbConnection";
-import { IUser } from "../models/user";
+import collections, { dbConnection } from "./dbConnection.js";
+import { IUser } from "../models/user.js";
 
 
 

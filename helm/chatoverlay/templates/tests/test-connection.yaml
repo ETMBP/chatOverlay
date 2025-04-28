@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "chatoverlay.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "chatoverlay.fullname" . }}:{{ .Values.frontendService.port }}']
   restartPolicy: Never

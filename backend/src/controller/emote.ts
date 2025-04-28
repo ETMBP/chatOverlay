@@ -1,9 +1,9 @@
-import { IEmote } from "../models/emote";
+import { IEmote } from "../models/emote.js";
 import { ObjectId } from "mongodb";
-import { tApi } from "./twitchAuth";
-import collections from "./dbConnection";
+import { tApi } from "./twitchAuth.js";
+import collections from "./dbConnection.js";
 import { HelixChannelEmote, HelixEmote } from "@twurple/api";
-import { User } from "./user";
+import { User } from "./user.js";
 
 export class Emote implements IEmote {
     name: string;

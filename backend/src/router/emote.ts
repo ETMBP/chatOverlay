@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { Emote, fetchSTvEmotes, fetchTwitchChannelEmotes, fetchTwitchGlobalEmotes, getAllNames } from "../controller/emote";
-import { addMinutes } from "date-fns/addMinutes";
-import { IEmote } from "../models/emote";
+import { Emote, fetchSTvEmotes, fetchTwitchChannelEmotes, fetchTwitchGlobalEmotes, getAllNames } from "../controller/emote.js";
+import { addMinutes } from "date-fns";
+import { IEmote } from "../models/emote.js";
 
 const emoteRouter = Router();
 

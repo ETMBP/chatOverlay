@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { Badge, fetchChannelBadges, fetchGlobalBadges } from "../controller/badge";
-import { IBadge } from "../models/badge";
+import { Badge, fetchChannelBadges, fetchGlobalBadges } from "../controller/badge.js";
+import { IBadge } from "../models/badge.js";
 import { addMinutes } from "date-fns";
 
 const badgeRouter = Router();

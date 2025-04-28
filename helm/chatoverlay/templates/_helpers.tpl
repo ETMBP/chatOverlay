@@ -5,6 +5,14 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "chatoverlay.frontendName" -}}
+{{- printf "%s-%s" .Chart.Name .Values.frontend.suffix | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "chatoverlay.backendName" -}}
+{{- printf "%s-%s" .Chart.Name .Values.backend.suffix | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
@@ -50,13 +58,30 @@ app.kubernetes.io/name: {{ include "chatoverlay.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "chatoverlay.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "chatoverlay.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- define "chatoverlay.frontendSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "chatoverlay.frontendName" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "chatoverlay.backendSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "chatoverlay.backendName" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "chatoverlay.frontendLabels" -}}
+helm.sh/chart: {{ include "chatoverlay.chart" . }}
+{{ include "chatoverlay.frontendSelectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "chatoverlay.backendLabels" -}}
+helm.sh/chart: {{ include "chatoverlay.chart" . }}
+{{ include "chatoverlay.backendSelectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}

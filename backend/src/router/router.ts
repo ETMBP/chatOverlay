@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { deleteAllCache, deleteBadgeCache, deleteEmoteCache, deleteUserCache } from "../controller/system";
+import { deleteAllCache, deleteBadgeCache, deleteEmoteCache, deleteUserCache } from "../controller/system.js";
 
 const systemRouter = Router();
 

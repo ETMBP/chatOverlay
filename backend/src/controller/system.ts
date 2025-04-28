@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import collections from "./dbConnection";
+import collections from "./dbConnection.js";
 
 export async function deleteUserCache(): Promise<number | void> {
     const dbConn = collections.users;

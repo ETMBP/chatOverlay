@@ -1,10 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
-import { dbConnection } from "./controller/dbConnection";
-import { twitchApiConnection } from "./controller/twitchAuth";
-import userRouter from "./router/user";
-import badgeRouter from "./router/badge";
-import emoteRouter from "./router/emote";
-import systemRouter from "./router/router";
+import { dbConnection } from "./controller/dbConnection.js";
+import { twitchApiConnection } from "./controller/twitchAuth.js";
+import userRouter from "./router/user.js";
+import badgeRouter from "./router/badge.js";
+import emoteRouter from "./router/emote.js";
+import systemRouter from "./router/router.js";
 
 const app = express();
 const port = process.env.PORT || 5000;

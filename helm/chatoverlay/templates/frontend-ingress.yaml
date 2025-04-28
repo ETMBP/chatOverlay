@@ -1,21 +1,21 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.frontendIngress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "chatoverlay.fullname" . }}
+  name: {{ include "chatoverlay.frontendName" . }}
   labels:
-    {{- include "chatoverlay.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+    {{- include "chatoverlay.frontendLabels" . | nindent 4 }}
+  {{- with .Values.frontendIngress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- with .Values.ingress.className }}
+  {{- with .Values.frontendIngress.className }}
   ingressClassName: {{ . }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.frontendIngress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.frontendIngress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -24,7 +24,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.frontendIngress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -35,9 +35,9 @@ spec:
             {{- end }}
             backend:
               service:
-                name: {{ include "chatoverlay.fullname" $ }}
+                name: {{ include "chatoverlay.frontendName" $ }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ $.Values.frontendService.port }}
           {{- end }}
     {{- end }}
 {{- end }}
