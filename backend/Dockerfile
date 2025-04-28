@@ -7,9 +7,9 @@ COPY package*.json ./
 COPY tsconfig.prod.json ./
 RUN chown node:node -R ./
 USER node
-RUN npm install -g npm@11.3.0
 RUN npm install
-COPY --chown=node:node ./src .
+RUN mkdir ./src
+COPY --chown=node:node ./src ./src
 RUN npm run build:prod
 
 EXPOSE 5000
