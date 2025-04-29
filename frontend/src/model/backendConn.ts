@@ -12,7 +12,7 @@ export class BackendConnection implements IBackendUrls {
     emote: string;
     
     constructor(){
-        this.base = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+        this.base = process.env.REACT_APP_BACKEND_URL || 'http://chatoverlay-backend.etmbp.lo:5000';
         this.user = this.base + '/user';
         this.badge = this.base + '/badge';
         this.emote = this.base + '/emote'

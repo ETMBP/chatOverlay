@@ -8,7 +8,7 @@ spec:
   type: {{ .Values.backendService.type }}
   ports:
     - port: {{ .Values.backendService.port }}
-      targetPort: http
+      targetPort: {{ .Values.backendService.port }}
       protocol: TCP
       name: http
   selector:
