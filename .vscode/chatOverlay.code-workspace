@@ -13,7 +13,10 @@
 			"path": "../frontend"
 		}
 	],
-	"settings": {},
+	"settings": {
+		"powershell.cwd": "projectRoot",
+		"editor.formatOnPaste": true
+	},
 	"launch": {
 		"version": "0.2.0",
 		"configurations": [

@@ -1,0 +1,15 @@
+name: smart-build.yml
+on: 
+  push:
+    branches:
+      - "testing"
+
+jobs:      
+  set_variables: 
+    name: Get info from commit message
+    runs-on: docker-build-etmbp
+    permissions:
+      contents: read
+    steps:
+      - name: Get frontend version
+        run: echo "${{github.event.commits[0].message}}" | grep -oE "\[fev\:[0-9]+\.[0-9]+\.[0-9]+\]" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+"
