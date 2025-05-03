@@ -12,6 +12,8 @@ jobs:
       contents: read
     steps:
       - name: Get frontend version
-        run: export FE_VER=$(echo ${{ github.event.head_commit.message }} | grep -oE "\[fev\:[0-9]+\.[0-9]+\.[0-9]+\]" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
-      - name: Get FE_VER
-        run: echo $FE_VER
+        run: |
+          export FE_VER=$(echo ${{ github.event.head_commit.message }} | grep -oE "\[fev\:[0-9]+\.[0-9]+\.[0-9]+\]" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
+          echo "frontend_version=$FE_VER" >> $GITHUB_ENV
+      - name: Check vars
+        run: echo $frontend_version
