@@ -15,5 +15,9 @@ jobs:
         run: |
           export FE_VER=$(echo ${{ github.event.head_commit.message }} | grep -oE "\[fev\:[0-9]+\.[0-9]+\.[0-9]+\]" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
           echo "frontend_version=$FE_VER" >> $GITHUB_ENV
+          export BE_VER=$(echo ${{ github.event.head_commit.message }} | grep -oE "\[bev\:[0-9]+\.[0-9]+\.[0-9]+\]" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
+          echo "backend_version=$BE_VER" >> $GITHUB_ENV
       - name: Check vars
-        run: echo $frontend_version
+        run: |
+          echo "Frontend version: $frontend_version"
+          echo "Backend version: $backend_version"
