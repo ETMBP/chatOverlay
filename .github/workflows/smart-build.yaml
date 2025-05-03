@@ -11,5 +11,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Get frontend version
         run: echo ${{ github.event.push.head_commit.message }} | grep -oE "\[fev\:[0-9]+\.[0-9]+\.[0-9]+\]" | grep -oE "[0-9]+\.[0-9]+\.[0-9]+"
