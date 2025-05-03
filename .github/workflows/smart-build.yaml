@@ -58,7 +58,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  push_backend_to_registry:
+  build_backend_image:
     name: Push backend image to Docker Hub
     needs: set_variables
     if: ${{  needs.set_variables.outputs.backend_version }}
@@ -92,3 +92,15 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  deploy_with_helm:
+    name: Deploy with helm
+    needs: [build_frontend_image, build_backend_image]
+    if: ${{ success() }}
+    runs-on: docker-build-etmbp
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Deploy
+        run: helm version
