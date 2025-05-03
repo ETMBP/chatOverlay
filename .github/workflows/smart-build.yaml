@@ -95,7 +95,7 @@ jobs:
   deploy_with_helm:
     name: Deploy with helm
     needs: [build_frontend_image, build_backend_image, set_variables]
-    if: ${{ needs.build_backend_image.result == 'success' && needs.build_frontend_image.result == 'success' && (needs.set_variables.outputs.backend_version || needs.set_variables.outputs.frontend_version)}}
+    if: ${{ (needs.build_backend_image.result == 'success' || needs.build_backend_image.result == 'skipped') && (needs.build_frontend_image.result == 'success' || needs.build_frontend_image.result == 'skipped') && (needs.set_variables.outputs.backend_version || needs.set_variables.outputs.frontend_version)}}
     runs-on: docker-build-etmbp
     permissions:
       contents: read
@@ -104,3 +104,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Deploy
         run: helm version
+      - name: Backend only
+        if: ${{ needs.build_backend_image.result == 'success' && needs.set_variables.outputs.backend_version }}
+        run: echo ${{ needs.set_variables.outputs.backend_version }}
