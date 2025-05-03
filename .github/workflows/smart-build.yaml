@@ -94,6 +94,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
   deploy_with_helm:
     name: Deploy with helm
+    if: ${{ always() }}
     needs: [build_frontend_image, build_backend_image, set_variables]
     runs-on: docker-build-etmbp
     permissions:
@@ -101,7 +102,7 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - name: Deploy
+      - name: Show results
         run: |
           helm version
           echo "BE Result: ${{needs.build_backend_image.result}}"
@@ -110,4 +111,4 @@ jobs:
           echo "FE Ver: ${{needs.set_variables.outputs.frontend_version}}"
       - name: Backend only
         if: ${{ needs.build_backend_image.result == 'success' && needs.set_variables.outputs.backend_version }}
-        run: echo ${{ needs.set_variables.outputs.backend_version }}
+        run: echo "Deploying backend"
