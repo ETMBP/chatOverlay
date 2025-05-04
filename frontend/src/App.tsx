@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import ComfyJS from 'comfy.js';
 import { useSearchParams } from 'react-router';
 import { connectComfy, initBackend } from './control/init';
 import { ChatMessage } from './control/chat';
-import { IChatMessage, IChatMessageBadgeDTO, IChatMessageContainerProps, IChatMessageDTO, IIncomingChatMessage } from './model/chat';
+import { IChatMessageContainerProps, IIncomingChatMessage } from './model/chat';
 import { ChatMessageContainer } from './view/chat';
 import { AnimatePresence, motion } from 'framer-motion';
 

@@ -12,10 +12,18 @@ export class BackendConnection implements IBackendUrls {
     emote: string;
     
     constructor(){
-        this.base = process.env.REACT_APP_BACKEND_URL || 'http://chatoverlay-backend.etmbp.lo';
+        const regExp = new RegExp('(http\:\/\/(.*)\.[a-z]+)')
+        const backendUrl = ((window.location.href).match(regExp))
+        if (!!backendUrl && (!(window.location.href).match('localhost'))) {
+            this.base = backendUrl[0].replace('.lo', '-backend.lo')
+        }
+        else {
+            this.base = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+        }
         this.user = this.base + '/user';
         this.badge = this.base + '/badge';
         this.emote = this.base + '/emote'
+        console.debug('Backend base URL: ' + this.base)
     }
 }
 
