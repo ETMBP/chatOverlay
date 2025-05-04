@@ -1,3 +1,4 @@
+{{- if not .Values.backend.skip -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,11 +22,11 @@ spec:
             - name: http
               containerPort: {{ .Values.backendService.port }}
               protocol: TCP
-          {{- with .Values.livenessProbe }}
+          {{- with .Values.backendLivenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.readinessProbe }}
+          {{- with .Values.backendReadinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -37,3 +38,4 @@ spec:
           - secretRef: 
               {{- $backendName := include "chatoverlay.backendName" . }}
               name: {{ .Values.backend.secretName | default $backendName | quote }}
+{{- end -}}

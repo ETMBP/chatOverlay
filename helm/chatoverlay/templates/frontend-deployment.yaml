@@ -1,3 +1,4 @@
+{{- if not .Values.frontend.skip -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,11 +22,11 @@ spec:
             - name: http
               containerPort: {{ .Values.frontendService.port }}
               protocol: TCP
-          {{- with .Values.livenessProbe }}
+          {{- with .Values.frontendLivenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.readinessProbe }}
+          {{- with .Values.frontendReadinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -37,3 +38,4 @@ spec:
           - secretRef:
               {{- $frontendName := include "chatoverlay.frontendName" . }}
               name: {{ .Values.frontend.secretName | default $frontendName | quote }}
+{{- end -}}              

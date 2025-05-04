@@ -1,4 +1,4 @@
-{{- if .Values.backendIngress.enabled -}}
+{{- if and .Values.backendIngress.enabled (not .Values.backend.skip) -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -40,4 +40,4 @@ spec:
                   number: {{ $.Values.backendService.port }}
           {{- end }}
     {{- end }}
-{{- end }}
+{{- end -}}

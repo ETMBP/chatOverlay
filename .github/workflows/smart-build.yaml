@@ -113,6 +113,7 @@ jobs:
       - name: Save Kubeconfig
         run: echo "${{secrets.KUBECONFIG}}" > ./kubeconfig
       - name: Full Deploy
+        if: ${{ (needs.build_backend_image.result == 'success') && (needs.build_frontend_image.result == 'success') }}
         env:
           KUBECONFIG: ./kubeconfig
         run: |
@@ -123,4 +124,30 @@ jobs:
           --set backendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.backend_version) }}" \
           --set-json 'frontendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
           --set-json 'backendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}-backend.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
+          ./helm/chatoverlay
+      - name: Deploy Backend
+        if: ${{ (needs.build_backend_image.result == 'success') && (needs.build_frontend_image.result == 'skipped') }}
+        env:
+          KUBECONFIG: ./kubeconfig
+        run: |
+          helm upgrade --install "${{ format('chatoverlay-{0}', github.ref_name) }}" \
+          --namespace "${{ format('chatoverlay-{0}', github.ref_name) }}" \
+          --create-namespace \
+          --reuse-values \
+          --set frontend.skip=true \
+          --set backendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.backend_version) }}" \
+          --set-json 'backendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}-backend.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
+          ./helm/chatoverlay
+      - name: Deploy Frontend
+        if: ${{ (needs.build_backend_image.result == 'skipped') && (needs.build_frontend_image.result == 'success') }}
+        env:
+          KUBECONFIG: ./kubeconfig
+        run: |
+          helm upgrade --install "${{ format('chatoverlay-{0}', github.ref_name) }}" \
+          --namespace "${{ format('chatoverlay-{0}', github.ref_name) }}" \
+          --create-namespace \
+          --reuse-values \
+          --set backend.skip=true \
+          --set frontendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}" \
+          --set-json 'frontendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
           ./helm/chatoverlay
