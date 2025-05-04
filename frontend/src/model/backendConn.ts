@@ -12,10 +12,12 @@ export class BackendConnection implements IBackendUrls {
     emote: string;
     
     constructor(){
-        const regExp = new RegExp('(http\:\/\/(.*)\.[a-z]+)')
+        const regExp = new RegExp('(http://(.*).[a-z]+)')
         const backendUrl = ((window.location.href).match(regExp))
-        if (!!backendUrl && (!(window.location.href).match('localhost'))) {
-            this.base = backendUrl[0].replace('.lo', '-backend.lo')
+        if (!!backendUrl /*&& (!(window.location.href).match('localhost'))*/) {
+            let splitUrl = backendUrl[0].split('.')
+            splitUrl[0] = splitUrl[0] + '-backend'
+            this.base = splitUrl.join('.')
         }
         else {
             this.base = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
