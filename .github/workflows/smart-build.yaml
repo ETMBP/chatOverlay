@@ -120,5 +120,6 @@ jobs:
           --namespace "${{ format('chatoverlay-{0}', github.ref_name) }}" \
           --create-namespace \
           --set frontendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}" \
-          --set backendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}" \
+          --set backendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.backend_version) }}" \
+          --set-json 'frontendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
           ./helm/chatoverlay
