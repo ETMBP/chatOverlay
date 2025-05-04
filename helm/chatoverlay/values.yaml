@@ -130,11 +130,11 @@ frontendReadinessProbe:
 
 backendLivenessProbe:
   httpGet:
-    path: /
+    path: /status
     port: 5000
 backendReadinessProbe:
   httpGet:
-    path: /
+    path: /status
     port: 5000
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/

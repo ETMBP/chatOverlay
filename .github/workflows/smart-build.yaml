@@ -136,6 +136,8 @@ jobs:
           --reuse-values \
           --set backendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.backend_version) }}" \
           --set-json 'backendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}-backend.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
+          --set-json 'backendLivenessProbe={"httpGet":{"path":"/status","port":5000}}' \
+          --set-json 'backendReadinessProbe={"httpGet":{"path":"/status","port":5000}}' \
           ./helm/chatoverlay
       - name: Deploy Frontend
         if: ${{ (needs.build_backend_image.result == 'skipped') && (needs.build_frontend_image.result == 'success') }}
