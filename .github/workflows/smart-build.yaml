@@ -27,6 +27,7 @@ jobs:
         run: |
           echo "Frontend version: $frontend_version"
           echo "Backend version: $backend_version"
+          echo "${{ github.ref_name }}"
   build_frontend_image:
     needs: set_variables
     if: ${{  needs.set_variables.outputs.frontend_version }}
@@ -48,7 +49,7 @@ jobs:
         with:
           images: zelixplore/chatoverlay-frontend
           tags: |
-            type=raw,${{ needs.set_variables.outputs.frontend_version }}
+            type=raw,${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -81,7 +82,7 @@ jobs:
         with:
           images: zelixplore/chatoverlay-backend
           tags: |
-            type=raw,${{ needs.set_variables.outputs.backend_version }}
+            type=raw,${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.backend_version) }}
 
       - name: Build and push Docker image
         id: push
@@ -115,9 +116,9 @@ jobs:
         env:
           KUBECONFIG: ./kubeconfig
         run: |
-          helm upgrade --install chatoverlay \
-          --namespace chatoverlay \
+          helm upgrade --install "${{ format('chatoverlay-{0}', github.ref_name) }}" \
+          --namespace "${{ format('chatoverlay-{0}', github.ref_name) }}" \
           --create-namespace \
-          --set frontendImage.tag="${{needs.set_variables.outputs.frontend_version}}" \
-          --set backendImage.tag="${{needs.set_variables.outputs.backend_version}}" \
+          --set frontendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}" \
+          --set backendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}" \
           ./helm/chatoverlay
