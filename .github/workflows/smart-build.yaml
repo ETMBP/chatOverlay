@@ -31,7 +31,7 @@ jobs:
   build_frontend_image:
     needs: set_variables
     if: ${{  needs.set_variables.outputs.frontend_version }}
-    name: Build frontend image
+    name: Build and push frontend image
     runs-on: docker-build-etmbp
     permissions:
       contents: read
@@ -60,7 +60,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   build_backend_image:
-    name: Push backend image to Docker Hub
+    name: Build and push backend image
     needs: set_variables
     if: ${{  needs.set_variables.outputs.backend_version }}
     runs-on: docker-build-etmbp
@@ -122,4 +122,5 @@ jobs:
           --set frontendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}" \
           --set backendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.backend_version) }}" \
           --set-json 'frontendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
+          --set-json 'backendIngress.hosts=[{"host":"${{ format('chatoverlay-backend-{0}.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
           ./helm/chatoverlay
