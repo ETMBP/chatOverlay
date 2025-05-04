@@ -109,9 +109,11 @@ jobs:
           echo "FE Result: ${{needs.build_frontend_image.result}}"
           echo "BE Ver: ${{needs.set_variables.outputs.backend_version}}"
           echo "FE Ver: ${{needs.set_variables.outputs.frontend_version}}"
+      - name: Save Kubeconfig
+        run: echo "${{secrets.KUBECONFIG}}" > ./kubeconfig
       - name: Full Deploy
         env:
-          KUBECONFIG: ${{secrets.KUBECONFIG}}
+          KUBECONFIG: ./kubeconfig
         run: |
           helm upgrade --install chatoverlay \
           --namespace chatoverlay \
