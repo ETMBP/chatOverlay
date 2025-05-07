@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { dbConnection } from "./controller/dbConnection.js";
+import { dbConnection, collections } from "./controller/dbConnection.js";
 import { twitchApiConnection } from "./controller/twitchAuth.js";
 import userRouter from "./router/user.js";
 import badgeRouter from "./router/badge.js";
@@ -8,12 +8,23 @@ import systemRouter from "./router/router.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
-var statusCode: number = 200;
-var statusMessage: string = "All system is green";
+let statusCode: number = 200;
+let statusMessage: string = "All system is green";
 
 dbConnection()
-    .then(res => console.log('Connecting to DB was sucessfull'))
-    .catch(error => console.error(error));
+    .then(res => {
+        if (collections.users) {
+            console.log('Connecting to DB was sucessfull');
+        }
+        else {
+            throw new Error('Unexpected error');
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        statusCode = 500;
+        statusMessage = `DB Connection failed: ${error}`;
+    });
 
 try {
     twitchApiConnection();
