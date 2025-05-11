@@ -4,7 +4,7 @@ import { twitchApiConnection } from "./controller/twitchAuth.js";
 import userRouter from "./router/user.js";
 import badgeRouter from "./router/badge.js";
 import emoteRouter from "./router/emote.js";
-import systemRouter from "./router/router.js";
+import systemRouter from "./router/system.js";
 
 const app = express();
 const port = process.env.PORT || 5000;

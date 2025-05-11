@@ -10,22 +10,24 @@ export class BackendConnection implements IBackendUrls {
     user: string;
     badge: string;
     emote: string;
+    system: string;
     
     constructor(){
-        const regExp = new RegExp('(http\\://(.*)\\.[a-z]+)', 'g')
-        const backendUrl = ((window.location.href).match(regExp))
-        if (!!backendUrl /*&& (!(window.location.href).match('localhost'))*/) {
-            let splitUrl = backendUrl[0].split('.')
-            splitUrl[0] = splitUrl[0] + '-backend'
-            this.base = splitUrl.join('.')
+        const regExp = new RegExp('(http\\://(.*)\\.[a-z]+)', 'g');
+        const backendUrl = ((window.location.href).match(regExp));
+        if (!!backendUrl && (!(window.location.href).match('localhost'))) {
+            let splitUrl = backendUrl[0].split('.');
+            splitUrl[0] = splitUrl[0] + '-backend';
+            this.base = splitUrl.join('.');
         }
         else {
             this.base = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
         }
         this.user = this.base + '/user';
         this.badge = this.base + '/badge';
-        this.emote = this.base + '/emote'
-        console.debug('Backend base URL: ' + this.base)
+        this.emote = this.base + '/emote';
+        this.system = this.base + '/system';
+        console.debug('Backend base URL: ' + this.base);
     }
 }
 

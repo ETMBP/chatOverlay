@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import Settings from './view/settings';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
@@ -13,6 +14,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='chat' element={<App />} />
+        <Route path='settings' element={<Settings />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
