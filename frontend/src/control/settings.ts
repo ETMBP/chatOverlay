@@ -29,4 +29,26 @@ export class DbMaintenanceControl {
             return myError;
         }
     }
+
+    public async deleteEmotes(): Promise<IBackendError> {
+        const endpoint = this.bc.system + '/dropemotes';
+
+        try {
+            const response = await fetch(endpoint);
+
+            if (response.ok) {
+                const message = await response.json() as IBackendError;
+                return message;
+            }
+            else {
+                throw new Error(`${response.status}`)
+            }
+        } catch (error) {
+            const myError: IBackendError = {
+                message: error as string
+            };
+
+            return myError
+        }
+    }
 }

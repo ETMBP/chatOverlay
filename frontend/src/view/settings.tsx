@@ -13,11 +13,23 @@ export class DbMaintenance extends React.Component<ISettingsProps,ISettingsState
         this.state = {
             message: "0"
         }
+
         this.deleteUsers = this.deleteUsers.bind(this)
+        this.deleteEmotes = this.deleteEmotes.bind(this);
     }
 
     public async deleteUsers() {
+        this.setState({message: "Working..."})
         this.mt.deleteUsers()
+            .then(res => {
+                this.setState({message: res.message})
+            });
+    }
+
+    public async deleteEmotes() {
+        this.setState({message: "Working..."})
+
+        this.mt.deleteEmotes()
             .then(res => {
                 this.setState({message: res.message})
             });
@@ -26,7 +38,7 @@ export class DbMaintenance extends React.Component<ISettingsProps,ISettingsState
     public render(): React.ReactNode {
         return (<div id="db-mt-buttons">
             <div className="db-mt-button">
-                <button>
+                <button onClick={this.deleteEmotes}>
                     Delete Emotes
                 </button>
             </div>
