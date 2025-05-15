@@ -4,44 +4,35 @@ export class DbMaintenanceControl {
     private bc: BackendConnection
     constructor() {
         this.bc = new BackendConnection();
-        this.deleteUsers = this.deleteUsers.bind(this)
+        this.deleteEntity = this.deleteEntity.bind(this)
     }
 
-    public async deleteUsers(): Promise<IBackendError> {
-        const endpoint = this.bc.system + '/dropusers';
+    public async deleteEntity(type: string): Promise<IBackendError> {
+        let endpoint: string = "";
 
-        try {
-            const response = await fetch(endpoint);
-            let message: IBackendError = {message: ""};
-            
-            if (response.ok) {
-                message = await response.json() as IBackendError;
-                return message
-            }
-            else {
-                throw new Error(`${response.status}`)
-            }
-        } catch (error) {
-            const myError: IBackendError  = {
-                message: error as string
-            };
-
-            return myError;
+        if (type === 'emote') {
+            endpoint = this.bc.system + '/dropemotes';
         }
-    }
-
-    public async deleteEmotes(): Promise<IBackendError> {
-        const endpoint = this.bc.system + '/dropemotes';
-
+        else if (type === 'badge') {
+            endpoint = this.bc.system + '/dropbadges';
+        }
+        else if (type === 'user') {
+            endpoint = this.bc.system + '/dropusers';
+        }
         try {
-            const response = await fetch(endpoint);
-
-            if (response.ok) {
-                const message = await response.json() as IBackendError;
-                return message;
+            if (!!endpoint) {
+                const response = await fetch(endpoint);
+    
+                if (response.ok) {
+                    const message = await response.json() as IBackendError;
+                    return message;
+                }
+                else {
+                    throw new Error(`${response.status}`)
+                }
             }
             else {
-                throw new Error(`${response.status}`)
+                throw new Error(type + " is not a valid entity type to delete") 
             }
         } catch (error) {
             const myError: IBackendError = {

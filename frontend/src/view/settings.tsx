@@ -8,52 +8,43 @@ export class DbMaintenance extends React.Component<ISettingsProps,ISettingsState
     private mt: DbMaintenanceControl;
 
     constructor(props: ISettingsProps) {
-        super(props)
+        super(props);
         this.mt = new DbMaintenanceControl();
         this.state = {
             message: "0"
-        }
+        };
 
-        this.deleteUsers = this.deleteUsers.bind(this)
-        this.deleteEmotes = this.deleteEmotes.bind(this);
+        this.deleteEntity = this.deleteEntity.bind(this);
     }
 
-    public async deleteUsers() {
-        this.setState({message: "Working..."})
-        this.mt.deleteUsers()
-            .then(res => {
-                this.setState({message: res.message})
-            });
-    }
+    public async deleteEntity(type: string) {
+        this.setState({ message: "Working..." })
 
-    public async deleteEmotes() {
-        this.setState({message: "Working..."})
-
-        this.mt.deleteEmotes()
+        this.mt.deleteEntity(type)
             .then(res => {
-                this.setState({message: res.message})
+                this.setState({ message: res.message })
             });
     }
 
     public render(): React.ReactNode {
         return (<div id="db-mt-buttons">
             <div className="db-mt-button">
-                <button onClick={this.deleteEmotes}>
+                <button onClick={() => this.deleteEntity('emote')}>
                     Delete Emotes
                 </button>
             </div>
             <div className="db-mt-button">
-                <button>
+                <button onClick={() => this.deleteEntity('badge')}>
                     Delete Badges
                 </button>
             </div>
             <div className="db-mt-button">
-                <button onClick={this.deleteUsers}>
+                <button onClick={() => this.deleteEntity('user')}>
                     Delete Users
                 </button>
-                <div className="user-result-message">
-                    <span>{`${this.state.message}`}</span>
-                </div>
+            </div>
+            <div className="delete-result-message">
+                <span>{this.state.message}</span>
             </div>
         </div>);
     }
