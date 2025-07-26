@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import Settings from './view/settings';
-import Events from './view/twitchEvent'
+import Events from './view/twitchEvent';
+import Tests from './view/test';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
@@ -17,6 +18,7 @@ root.render(
         <Route path='chat' element={<App />} />
         <Route path='settings' element={<Settings />} />
         <Route path='event' element={<Events />} />
+        <Route path='test' element={<Tests />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

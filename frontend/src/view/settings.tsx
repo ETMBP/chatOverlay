@@ -55,6 +55,7 @@ function Settings() {
     const handleHideButton = () => {
         setHideButtons(!hideButtons)
     }
+    
     return (
         <div id="page">
             <div id="header">
