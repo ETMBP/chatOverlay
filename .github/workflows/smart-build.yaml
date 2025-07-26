@@ -50,6 +50,8 @@ jobs:
           images: zelixplore/chatoverlay-frontend
           tags: |
             type=raw,${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -83,6 +85,9 @@ jobs:
           images: zelixplore/chatoverlay-backend
           tags: |
             type=raw,${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.backend_version) }}
+            
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Build and push Docker image
         id: push
