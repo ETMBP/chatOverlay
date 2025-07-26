@@ -7,7 +7,7 @@ on:
 jobs:      
   set_variables: 
     name: Get info from commit message
-    runs-on: docker-build-etmbp
+    runs-on: self-hosted
     permissions:
       contents: read
     outputs:
@@ -32,7 +32,7 @@ jobs:
     needs: set_variables
     if: ${{  needs.set_variables.outputs.frontend_version }}
     name: Build and push frontend image
-    runs-on: docker-build-etmbp
+    runs-on: self-hosted
     permissions:
       contents: read
     steps:
@@ -63,7 +63,7 @@ jobs:
     name: Build and push backend image
     needs: set_variables
     if: ${{  needs.set_variables.outputs.backend_version }}
-    runs-on: docker-build-etmbp
+    runs-on: self-hosted
     permissions:
       contents: read
     steps:
@@ -97,7 +97,7 @@ jobs:
     name: Deploy with helm
     if: ${{ always() }}
     needs: [build_frontend_image, build_backend_image, set_variables]
-    runs-on: docker-build-etmbp
+    runs-on: self-hosted
     permissions:
       contents: read
     steps:
