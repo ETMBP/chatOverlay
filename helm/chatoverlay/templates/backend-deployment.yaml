@@ -19,6 +19,10 @@ spec:
       {{- toYaml .Values.backendInitContainer | default "" | nindent 6 }}
         volumeMounts:
           {{- toYaml .Values.backendVolumeMounts | default "" | nindent 10 }}
+        envFrom:
+        - secretRef: 
+            {{- $backendName := include "chatoverlay.backendName" . }}
+            name: {{ .Values.backend.secretName | default $backendName | quote }}
       containers:
         - name: "{{ include "chatoverlay.backendName" . }}"
           image: "{{ .Values.backendImage.repository }}:{{ .Values.backendImage.tag | default .Chart.AppVersion }}"
