@@ -13,7 +13,7 @@ export class BackendConnection implements IBackendUrls {
     system: string;
     
     constructor(){
-        const regExp = new RegExp('(http\\://(.*)\\.[a-z]+)', 'g');
+        const regExp = new RegExp('(http(s{0,1})\\://(.*)\\.[a-z]+)', 'g');
         const backendUrl = ((window.location.href).match(regExp));
         if (!!backendUrl && (!(window.location.href).match('localhost'))) {
             let splitUrl = backendUrl[0].split('.');
