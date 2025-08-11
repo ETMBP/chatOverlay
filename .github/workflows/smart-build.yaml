@@ -127,8 +127,10 @@ jobs:
           --create-namespace \
           --set frontendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.frontend_version) }}" \
           --set backendImage.tag="${{ format('{0}-{1}', github.ref_name, needs.set_variables.outputs.backend_version) }}" \
-          --set-json 'frontendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
-          --set-json 'backendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}-backend.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]' \
+          --set-json 'frontendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"Prefix"}]}]' \
+          --set-json 'frontendIngress.tls=[{"hosts":["${{ format('chatoverlay-{0}.etmbp.lo', github.ref_name)}}"],"secretName":"${{ format('chatoverlay-{0}-tls', github.ref_name)}}"}]' \
+          --set-json 'backendIngress.hosts=[{"host":"${{ format('chatoverlay-{0}-backend.etmbp.lo', github.ref_name)}}","paths":[{"path":"/","pathType":"Prefix"}]}]' \
+          --set-json 'backendIngress.tls=[{"hosts":["${{ format('chatoverlay-{0}-backend.etmbp.lo', github.ref_name)}}"],"secretName":"${{ format('chatoverlay-{0}-backend-tls', github.ref_name)}}"}]' \
           ./helm/chatoverlay
       - name: Deploy Backend
         if: ${{ (needs.build_backend_image.result == 'success') && (needs.build_frontend_image.result == 'skipped') }}

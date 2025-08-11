@@ -14,6 +14,11 @@ backend:
   secretName: "chatoverlay-backend"
   skip: false
 
+backendInitContainer:
+  - name: reset-db
+    image: alpine/mongosh:2.0.2
+    command: ['mongosh', '$(DB_CONNECTION_STRING)', '--file', '/initScript/setup.js', '--tlsUseSystemCA']
+
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 frontendImage:
   repository: zelixplore/chatoverlay-frontend
@@ -87,7 +92,7 @@ frontendIngress:
     - host: chatoverlay.etmbp.lo
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -96,15 +101,19 @@ frontendIngress:
 backendIngress:
   enabled: true
   className: nginx
-  annotations: {}
+  annotations: 
+    cert-manager.io/cluster-issuer: etmbp-ca-issuer
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chatoverlay-backend.etmbp.lo
+    - host: chatoverlay-backend-test.etmbp.lo
       paths:
         - path: /
-          pathType: ImplementationSpecific
-  tls: []
+          pathType: Prefix
+  tls: 
+    - hosts:
+        - chatoverlay-backend-test.etmbp.lo
+      secretName: chatoverlay-backend-test-tls
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -146,11 +155,44 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+backendVolumes:
+- name: init-script
+  configMap:
+    name: init-script-test
+    items:
+    - key: setup.js
+      path: setup.js
+- name: etmbp-ca-bundle
+  configMap:
+    name: etmbp-bundle
+    defaultMode: 0644
+    optional: false
+    items:
+    - key: etmbp-root-certs.pem
+      path: ca-certificates.crt
+
+backendVolumeMounts:
+- mountPath: /initScript
+  name: init-script
+  readOnly: true
+- mountPath: /etc/ssl/certs/
+  name: etmbp-ca-bundle
+  readOnly: true
+
+frontendVolumes:
+- name: etmbp-ca-bundle
+  configMap:
+    name: etmbp-bundle
+    defaultMode: 0644
+    optional: false
+    items:
+    - key: etmbp-root-certs.pem
+      path: ca-certificates.crt
+
+frontendVolumeMounts:
+- mountPath: /etc/ssl/certs/
+  name: etmbp-ca-bundle
+  readOnly: true
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts: []

@@ -38,4 +38,8 @@ spec:
           - secretRef:
               {{- $frontendName := include "chatoverlay.frontendName" . }}
               name: {{ .Values.frontend.secretName | default $frontendName | quote }}
+          volumeMounts:
+          {{- toYaml .Values.frontendVolumeMounts | default "" | nindent 10 }}
+      volumes:
+      {{- toYaml .Values.frontendVolumes | default "" | nindent 6 -}}
 {{- end -}}              
